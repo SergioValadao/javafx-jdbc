@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import model.services.DepartamentoService;
 
 public class MainViewController implements Initializable {
 
@@ -34,7 +35,7 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		System.out.println("Menu de Departamento");
+		loadView2("/gui/DepartamentoLista.fxml");
 	}
 	
 	@FXML
@@ -68,5 +69,31 @@ public class MainViewController implements Initializable {
 			Alertas.showAlert("Falha grave", "Não foi possivel mostra tela", e.getMessage(),AlertType.ERROR);
 		}
 	}
+	
+	private synchronized void loadView2(String loadActive) {		
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(loadActive));
+			VBox newvbox = loader.load();
+			
+			Scene scene = Main.getMainScene();
+			
+			VBox mainVbox = (VBox) ((ScrollPane) scene.getRoot()).getContent();
+			
+			Node mainMenu = mainVbox.getChildren().get(0);
+			mainVbox.getChildren().clear();
+			mainVbox.getChildren().add(mainMenu);
+			
+			mainVbox.getChildren().addAll(newvbox.getChildren());
+			
+			DepartamentListaController controle = loader.getController();
+			controle.setDepartamentoService(new DepartamentoService());
+			controle.updateTableView();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Alertas.showAlert("Falha grave", "Não foi possivel mostra tela", e.getMessage(),AlertType.ERROR);
+		}
+	}
+
 
 }
