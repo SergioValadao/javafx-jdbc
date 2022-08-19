@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alertas;
@@ -35,21 +36,24 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		loadView2("/gui/DepartamentoLista.fxml");
+		//loadView("/gui/DepartamentoLista.fxml", 1);
+		loadView("/gui/DepartamentoLista.fxml", (DepartamentListaController controle) -> { 
+			controle.setDepartamentoService(new DepartamentoService());
+			controle.updateTableView();
+		});
 	}
 	
 	@FXML
 	public void onMenuItemSobreAction() {
-		loadView("/gui/Sobre.fxml");		
+		loadView("/gui/Sobre.fxml", x -> {});		
 	}
 	
 	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+	public void initialize(URL url, ResourceBundle rb) {
 		
 	}
 	
-	private synchronized void loadView(String loadActive) {		
+	private synchronized <T> void loadView(String loadActive, Consumer<T> initialize) {		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(loadActive));
 			VBox newvbox = loader.load();
@@ -64,36 +68,24 @@ public class MainViewController implements Initializable {
 			
 			mainVbox.getChildren().addAll(newvbox.getChildren());
 			
+			T control = loader.getController();
+			initialize.accept(control);
+			
+			//if(ativa == 1) {
+			//	lerdados(loader);
+			//}
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Alertas.showAlert("Falha grave", "Não foi possivel mostra tela", e.getMessage(),AlertType.ERROR);
 		}
 	}
 	
-	private synchronized void loadView2(String loadActive) {		
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource(loadActive));
-			VBox newvbox = loader.load();
-			
-			Scene scene = Main.getMainScene();
-			
-			VBox mainVbox = (VBox) ((ScrollPane) scene.getRoot()).getContent();
-			
-			Node mainMenu = mainVbox.getChildren().get(0);
-			mainVbox.getChildren().clear();
-			mainVbox.getChildren().add(mainMenu);
-			
-			mainVbox.getChildren().addAll(newvbox.getChildren());
-			
-			DepartamentListaController controle = loader.getController();
-			controle.setDepartamentoService(new DepartamentoService());
-			controle.updateTableView();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Alertas.showAlert("Falha grave", "Não foi possivel mostra tela", e.getMessage(),AlertType.ERROR);
-		}
-	}
+	//private void lerdados(FXMLLoader loader) {		
+	//	DepartamentListaController controle = loader.getController();
+	//	controle.setDepartamentoService(new DepartamentoService());
+	//	controle.updateTableView();
+	//}
+	
 
 
 }

@@ -46,6 +46,9 @@ public class DepartamentListaController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {		
 		initilizeNodes();
+		//setDepartamentoService(new DepartamentoService());
+		//updateTableView();
+
 	}
 
 	private void initilizeNodes() {
