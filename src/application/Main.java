@@ -1,7 +1,9 @@
 package application;
 
 import java.io.IOException;
+import java.sql.Connection;
 
+import connection.ConnectDB;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -14,7 +16,7 @@ public class Main extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) {
-		try {
+		try {						
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/gui/MainView.fxml"));
 			ScrollPane scroll = loader.load();
 			scroll.setFitToHeight(true);
