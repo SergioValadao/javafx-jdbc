@@ -42,8 +42,9 @@ public class DepartamentListaController implements Initializable {
 
 	@FXML
 	private void onbtnewAction(ActionEvent event){
-		Stage currentState = Utils.currentStage(event);		 
-		CreateDialogForm(currentState, "/gui/DepartamentoForm.fxml");
+		Stage currentState = Utils.currentStage(event);
+		Departamento obj = new Departamento();
+		CreateDialogForm(obj, currentState, "/gui/DepartamentoForm.fxml");		
 	}
 	
 	public void setDepartamentoService(DepartamentoService service ) {
@@ -55,7 +56,6 @@ public class DepartamentListaController implements Initializable {
 		initilizeNodes();
 		//setDepartamentoService(new DepartamentoService());
 		//updateTableView();
-
 	}
 
 	private void initilizeNodes() {
@@ -75,11 +75,15 @@ public class DepartamentListaController implements Initializable {
 		tbvdep.setItems(obsLista);
 	}
 	
-	public void CreateDialogForm(Stage oldstate, String formload) {
+	public void CreateDialogForm(Departamento obj, Stage oldstate, String formload) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(formload));		
 			Pane painel = loader.load();
 			
+			DepartamentoFormControl control = loader.getController();			
+			control.setDepartamento(obj);
+			control.updateDepartamentoformControl();
+			control.setDepartamentoService(new DepartamentoService());
 			Stage dialog = new Stage();			
 			dialog.setTitle("Novo Departamento");
 			dialog.setScene(new Scene(painel));

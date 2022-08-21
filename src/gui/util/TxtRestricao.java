@@ -27,5 +27,13 @@ public class TxtRestricao {
 			}
 		});
 	}
+	
+	public static void setTextString(TextField txt) {
+		txt.textProperty().addListener((obs, oldValue, newValue) -> {
+			if (newValue != null && !newValue.matches("^[a-zà-úA-ZÀ-Ú-_|\s]*$")) {
+				txt.setText(oldValue);
+			}
+		});
+	}
 
 }
