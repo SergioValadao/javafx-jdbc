@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import application.Main;
+import gui.listenner.DataChangeListenner;
 import gui.util.Alertas;
 import gui.util.Utils;
 import javafx.collections.FXCollections;
@@ -25,7 +26,7 @@ import javafx.stage.Stage;
 import model.entities.Departamento;
 import model.services.DepartamentoService;
 
-public class DepartamentListaController implements Initializable {
+public class DepartamentListaController implements Initializable, DataChangeListenner {
 	
 	private DepartamentoService service;
 
@@ -81,9 +82,10 @@ public class DepartamentListaController implements Initializable {
 			Pane painel = loader.load();
 			
 			DepartamentoFormControl control = loader.getController();			
-			control.setDepartamento(obj);
-			control.updateDepartamentoformControl();
+			control.setDepartamento(obj);			
 			control.setDepartamentoService(new DepartamentoService());
+			control.subdataChangeList(this);
+			control.updateDepartamentoformControl();
 			Stage dialog = new Stage();			
 			dialog.setTitle("Novo Departamento");
 			dialog.setScene(new Scene(painel));
@@ -96,5 +98,10 @@ public class DepartamentListaController implements Initializable {
 			Alertas.showAlert("IO Exception", "Erro lendo formulario",  e.getMessage(), AlertType.ERROR);
 		}
 		
+	}
+
+	@Override
+	public void onDataChangeListenner() {		
+		updateTableView();
 	}
 }

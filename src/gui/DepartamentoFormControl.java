@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import connection.DbException;
+import gui.listenner.DataChangeListenner;
 import gui.util.TxtRestricao;
 import gui.util.Utils;
 import javafx.event.ActionEvent;
@@ -19,6 +22,7 @@ public class DepartamentoFormControl implements Initializable {
 	
 	private Departamento departamento;
 	private DepartamentoService service;
+	private List<DataChangeListenner> Changelistenner = new ArrayList<>(); 
 	
 	@FXML
 	private TextField txtId;
@@ -34,6 +38,10 @@ public class DepartamentoFormControl implements Initializable {
 	
 	@FXML
 	private Label lblErro;
+	
+	public void subdataChangeList(DataChangeListenner listener) {
+		Changelistenner.add(listener);
+	}
 	
 	public void setDepartamento(Departamento departamento ) {
 		this.departamento = departamento;
@@ -52,9 +60,16 @@ public class DepartamentoFormControl implements Initializable {
 	private void onbtSalvarAction(ActionEvent event) {
 		this.departamento = getFormData();		
 		this.service.SalvarDepartamento(departamento);
+		notifyDataChangeListenner();
 		Utils.currentStage(event).close();
 	}
 	
+	private void notifyDataChangeListenner() {
+		for(DataChangeListenner listenner: Changelistenner) {
+			listenner.onDataChangeListenner();
+		}
+	}
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {		
 		// TODO Auto-generated method stub		
