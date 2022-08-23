@@ -11,7 +11,7 @@
 
 <VBox prefHeight="453.0" prefWidth="648.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.DepartamentListaController">
    <children>
-      <Label prefHeight="25.0" prefWidth="374.0" text="Cadastro de Departamento:">
+      <Label prefHeight="25.0" prefWidth="374.0" text="Cadastro de Vendedor:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
@@ -27,7 +27,7 @@
       <TableView fx:id="tbvdep" fixedCellSize="0.0" prefHeight="283.0" prefWidth="566.0">
         <columns>
           <TableColumn fx:id="tbvdepId" maxWidth="200.0" minWidth="50.0" prefWidth="100.0" styleClass="alcenter" text="Id" />
-          <TableColumn fx:id="tbvdepName" prefWidth="278.0" styleClass="allcenter" text="Departamento" />
+          <TableColumn fx:id="tbvdepName" prefWidth="278.0" styleClass="allcenter" text="Vendedor" />
             <TableColumn fx:id="tbvEdit" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" sortable="false" />
             <TableColumn fx:id="tbvExcluir" maxWidth="100.0" minWidth="60.0" prefWidth="60.0" />
         </columns>

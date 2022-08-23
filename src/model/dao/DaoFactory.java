@@ -6,7 +6,7 @@ import model.dao.impl.VendedoDaoJDBC;
 
 public class DaoFactory {
 
-	public static VendedorDao createSellerDao() {
+	public static VendedorDao createVendedorDao() {
 		return new VendedoDaoJDBC(ConnectDB.DbConnection());
 	}
 	
