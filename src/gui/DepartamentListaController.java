@@ -2,11 +2,8 @@ package gui;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
-
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-
 import application.Main;
 import gui.listenner.DataChangeListenner;
 import gui.util.Alertas;
@@ -18,10 +15,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -46,6 +43,9 @@ public class DepartamentListaController implements Initializable, DataChangeList
 	private TableColumn<Departamento, Departamento> tbvEdit;
 	
 	@FXML
+	private TableColumn<Departamento, Departamento> tbvExcluir;
+	
+	@FXML
 	private Button btNew;
 
 	private ObservableList<Departamento> obsLista;
@@ -64,8 +64,6 @@ public class DepartamentListaController implements Initializable, DataChangeList
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		initilizeNodes();
-		// setDepartamentoService(new DepartamentoService());
-		// updateTableView();
 	}
 
 	private void initilizeNodes() {
@@ -83,7 +81,8 @@ public class DepartamentListaController implements Initializable, DataChangeList
 		}
 		obsLista = FXCollections.observableArrayList(service.findALl());
 		tbvdep.setItems(obsLista);
-		initEditButtons(); 
+		initEditButtons();
+		initExcluirButtons();
 	}
 
 	public void CreateDialogForm(Departamento obj, Stage oldstate, String formload) {
@@ -132,5 +131,32 @@ public class DepartamentListaController implements Initializable, DataChangeList
 						event -> CreateDialogForm(obj, Utils.currentStage(event), "/gui/DepartamentoForm.fxml"));
 			}
 		});
+	}
+	private void initExcluirButtons() {
+		tbvExcluir.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tbvExcluir.setCellFactory(param -> new TableCell<Departamento, Departamento>() {
+			private final Button button = new Button("Excluir");
+
+			@Override
+			protected void updateItem(Departamento obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(
+						event -> ExcluirDepartamento(obj, Utils.currentStage(event), "/gui/DepartamentoForm.fxml"));
+			}
+		});
+	}
+
+	private void ExcluirDepartamento(Departamento obj, Stage currentStage, String string) {
+		Optional<ButtonType> result = Alertas.showConfirmation("Confirma", "Deseja excluir o departamento '" + obj.getName() +"'?");
+		if(result.get().equals(ButtonType.OK)) {
+			service.ExcluirDepartamento(obj);
+			updateTableView();
+		}
+		
 	}
 }

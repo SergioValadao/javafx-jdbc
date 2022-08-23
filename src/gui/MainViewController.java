@@ -36,7 +36,6 @@ public class MainViewController implements Initializable {
 	
 	@FXML
 	public void onMenuItemDepartamentoAction() {
-		//loadView("/gui/DepartamentoLista.fxml", 1);
 		loadView("/gui/DepartamentoLista.fxml", (DepartamentListaController controle) -> { 
 			controle.setDepartamentoService(new DepartamentoService());
 			controle.updateTableView();
@@ -69,23 +68,10 @@ public class MainViewController implements Initializable {
 			mainVbox.getChildren().addAll(newvbox.getChildren());
 			
 			T control = loader.getController();
-			initialize.accept(control);
-			
-			//if(ativa == 1) {
-			//	lerdados(loader);
-			//}
+			initialize.accept(control);			
 			
 		} catch (IOException e) {
 			Alertas.showAlert("Falha grave", "Não foi possivel mostra tela", e.getMessage(),AlertType.ERROR);
 		}
 	}
-	
-	//private void lerdados(FXMLLoader loader) {		
-	//	DepartamentListaController controle = loader.getController();
-	//	controle.setDepartamentoService(new DepartamentoService());
-	//	controle.updateTableView();
-	//}
-	
-
-
 }

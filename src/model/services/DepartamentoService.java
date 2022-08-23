@@ -20,5 +20,10 @@ public class DepartamentoService {
 		}else {
 			Dao.update(obj);
 		}
+	}	
+	public void ExcluirDepartamento(Departamento obj) {
+		if(obj.getId() != null) {
+			Dao.deleteById(obj.getId());
+		}
 	}
 }
