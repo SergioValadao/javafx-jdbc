@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="453.0" prefWidth="648.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorListaController">
+<VBox prefHeight="492.0" prefWidth="830.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.VendedorListaController">
    <children>
       <Label prefHeight="25.0" prefWidth="374.0" text="Cadastro de Vendedor:">
          <font>
@@ -24,12 +24,15 @@
           <Button fx:id="btNew" mnemonicParsing="false" onAction="#onbtnewAction" text="Novo" />
         </items>
       </ToolBar>
-      <TableView fx:id="tbvdep" fixedCellSize="0.0" prefHeight="283.0" prefWidth="566.0">
+      <TableView fx:id="tbvVendedor" fixedCellSize="0.0" prefHeight="283.0" prefWidth="566.0">
         <columns>
-          <TableColumn fx:id="tbvdepId" maxWidth="200.0" minWidth="50.0" prefWidth="100.0" styleClass="alcenter" text="Id" />
-          <TableColumn fx:id="tbvdepName" prefWidth="278.0" styleClass="allcenter" text="Vendedor" />
-            <TableColumn fx:id="tbvEdit" maxWidth="50.0" minWidth="50.0" prefWidth="50.0" resizable="false" sortable="false" />
-            <TableColumn fx:id="tbvExcluir" maxWidth="100.0" minWidth="60.0" prefWidth="60.0" />
+          <TableColumn fx:id="tbvId" maxWidth="200.0" minWidth="50.0" prefWidth="100.0" styleClass="alcenter" text="Id" />
+          <TableColumn fx:id="tbvNome" prefWidth="170.0" styleClass="allcenter" text="Nome do Vendedor" />
+            <TableColumn fx:id="tbvEmail" prefWidth="303.0" styleClass="allcenter" text="Email" />
+            <TableColumn fx:id="tbvAniversario" maxWidth="300.0" minWidth="90.0" prefWidth="100.0" styleClass="allcenter" text="Aniversário" />
+            <TableColumn fx:id="tbvSalario" maxWidth="300.0" minWidth="70.0" prefWidth="90.0" styleClass="allcenter" text="Salário" />
+            <TableColumn fx:id="tbvEdit" maxWidth="45.0" minWidth="45.0" prefWidth="45.0" resizable="false" sortable="false" />
+            <TableColumn fx:id="tbvExcluir" maxWidth="60.0" minWidth="60.0" prefWidth="60.0" resizable="false" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

@@ -11,8 +11,7 @@ public class Vendedor implements Serializable {
 	private String name;
 	private String email;
 	private Date birthDate;
-	private Double baseSalary;
-	
+	private Double baseSalary;	
 	private Departamento department;
 	
 	public Vendedor() {

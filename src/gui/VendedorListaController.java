@@ -1,8 +1,11 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
 import application.Main;
 import gui.listenner.DataChangeListenner;
 import gui.util.Alertas;
@@ -12,15 +15,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import model.entities.Vendedor;
+import model.services.DepartamentoService;
 import model.services.VendedorService;
 
 public class VendedorListaController implements Initializable, DataChangeListenner {
@@ -28,14 +37,20 @@ public class VendedorListaController implements Initializable, DataChangeListenn
 	private VendedorService service;
 
 	@FXML
-	private TableView<Vendedor> tbvdep;
+	private TableView<Vendedor> tbvVendedor;
 	@FXML
-	private TableColumn<Vendedor, Integer> tbvdepId;
+	private TableColumn<Vendedor, Integer> tbvId;
 	@FXML
-	private TableColumn<Vendedor, String> tbvdepName;
+	private TableColumn<Vendedor, String> tbvNome;
 	@FXML
-	private TableColumn<Vendedor, Vendedor> tbvEdit;
+	private TableColumn<Vendedor, String> tbvEmail;
+	@FXML
+	private TableColumn<Vendedor, Date > tbvAniversario;
+	@FXML
+	private TableColumn<Vendedor, Double> tbvSalario;
 	
+	@FXML
+	private TableColumn<Vendedor, Vendedor> tbvEdit;	
 	@FXML
 	private TableColumn<Vendedor, Vendedor> tbvExcluir;
 	
@@ -61,12 +76,18 @@ public class VendedorListaController implements Initializable, DataChangeListenn
 	}
 
 	private void initilizeNodes() {
-		tbvdepId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		tbvdepName.setCellValueFactory(new PropertyValueFactory<>("Name"));
-
+		
+		tbvId.setCellValueFactory(new PropertyValueFactory<>("id"));
+		tbvNome.setCellValueFactory(new PropertyValueFactory<>("name"));
+		tbvEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+		tbvAniversario.setCellValueFactory(new PropertyValueFactory<>("birthDate"));
+		Utils.formatTableColumnDate(tbvAniversario, "dd/MM/yyyy" );
+		tbvSalario.setCellValueFactory(new PropertyValueFactory<>("baseSalary"));
+		Utils.formatTableColumnDouble(tbvSalario, 2);
+		
 		// define o tamanho da tableview para o tamanho da janela????
 		Stage stage = (Stage) Main.getMainScene().getWindow();
-		tbvdep.prefHeightProperty().bind(stage.heightProperty());
+		tbvVendedor.prefHeightProperty().bind(stage.heightProperty());
 	}
 
 	public void updateTableView() {
@@ -74,33 +95,33 @@ public class VendedorListaController implements Initializable, DataChangeListenn
 			throw new IllegalStateException("Serviço deve ser criado antes.");
 		}
 		obsLista = FXCollections.observableArrayList(service.findALl());
-		tbvdep.setItems(obsLista);
+		tbvVendedor.setItems(obsLista);
 		initEditButtons();
 		initExcluirButtons();
 	}
 
 	public void CreateDialogForm(Vendedor obj, Stage oldstate, String formload) {
-//		try {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(formload));
-//			Pane painel = loader.load();
-//
-//			VendedorFormControl control = loader.getController();
-//			control.setVendedor(obj);
-//			control.setVendedorService(new VendedorService());
-//			control.subdataChangeList(this);
-//			control.updateVendedorformControl();
-//			Stage dialog = new Stage();
-//			dialog.setTitle("Novo Vendedor");
-//			dialog.setScene(new Scene(painel));
-//			dialog.setResizable(false);
-//			dialog.initOwner(oldstate);
-//			dialog.initModality(Modality.WINDOW_MODAL);
-//			dialog.showAndWait();
-//
-//		} catch (IOException e) {
-//			Alertas.showAlert("IO Exception", "Erro lendo formulario", e.getMessage(), AlertType.ERROR);
-//		}
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(formload));
+			Pane painel = loader.load();
 
+			VendedorFormControl control = loader.getController();
+     		control.setVendedor(obj);
+			control.setVendedorService(new VendedorService(), new DepartamentoService());
+			control.loadAssociatObjetcts();
+			control.subdataChangeList(this);
+			control.updateVendedorformControl();
+			Stage dialog = new Stage();
+			dialog.setTitle("Novo Vendedor");
+			dialog.setScene(new Scene(painel));
+			dialog.setResizable(false);
+			dialog.initOwner(oldstate);
+			dialog.initModality(Modality.WINDOW_MODAL);
+			dialog.showAndWait();
+
+		} catch (IOException e) {
+			Alertas.showAlert("IO Exception", "Erro lendo formulario", e.getMessage(), AlertType.ERROR);
+		}
 	}
 
 	@Override
